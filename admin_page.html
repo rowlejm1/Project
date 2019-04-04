@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Admin Page</title>
+</head>
+<body>
+    <h1>ADMIN PAGE</h1>
+    <ul id="messages"></ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        $(function () {
+        var socket = io();
+        
+        socket.on('user connected', function(msg){
+            $("#messages").find("#"+msg).remove();
+            $("#messages").find("#"+msg).remove();
+            $('#messages').append($('<li>').attr("id",msg).text(msg + " has connected"));
+            $('#messages').append($('<button>').attr("id",msg).click(function(){ $("#"+msg).css("color","black"); }).text("Clear Alert"));
+        });
+
+        socket.on('admin message', function(msg){
+            $("#"+msg).css("color","red");
+        });
+    });
+    </script>
+</body>
+</html>
