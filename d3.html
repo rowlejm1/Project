@@ -14,7 +14,7 @@
     // Set graph
 	var width = 700,
 		height = 700,
-		padding = 100;
+		padding = 10;
 			
 	// create an svg container
 	var vis = d3.select("#graph")
@@ -35,17 +35,18 @@
 		.orient("bottom")
 		.scale(xScale);
 
-    var values = [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,1,2,3,4,5,6,7,8,9,10];
+	// displayed tick values
+    var displayValues = [-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,1,2,3,4,5,6,7,8,9,10];
 
 	var xAxisPlot = vis.append("g")
 		.attr("class", "axis axis--x")
 		.attr("transform", "translate(0," + (height/2) + ")")
-		.call(xAxis.tickSize(-height, 0, 0).tickValues(values));
+		.call(xAxis.tickSize(-height, 0, 0).tickValues(displayValues));
 
 	var yAxisPlot = vis.append("g")
 		.attr("class", "axis axis--y")
 		.attr("transform", "translate("+ (width/2) +",0)")
-		.call(yAxis.tickSize(-width, 0, 0).tickValues(values));
+		.call(yAxis.tickSize(-width, 0, 0).tickValues(displayValues));
 
 	xAxisPlot.selectAll(".tick line")
 		.attr("y1", (width - (2*padding))/2 * -1)
@@ -55,7 +56,11 @@
 		.attr("x1", (width - (2*padding))/2 * -1)
         .attr("x2", (width - (2*padding))/2 * 1);
     
-    // draw circles
+	// draw circle and record value
+	var circleSize = 5;
+	var xInput = 0;
+	var yInput = 0;
+
     function drawCircle(x, y, size) {
         vis.selectAll("circle").remove();
         console.log('Drawing circle at', x, y, size);
@@ -68,9 +73,12 @@
     
     vis.on('click', function() {
         var coords = d3.mouse(this);
-        console.log(coords);
-        drawCircle(coords[0], coords[1], 10);
-    });
+		drawCircle(coords[0], coords[1], circleSize);
+		xInput = Math.round(xScale.invert(d3.event.pageX));
+		yInput = Math.round(yScale.invert(d3.event.pageY));
+		console.log('X Value is: ' + xScale.invert(d3.event.pageX));
+		console.log('Y Value is: ' + yScale.invert(d3.event.pageY));
+	});
     </script>
 </body>
 </html>
